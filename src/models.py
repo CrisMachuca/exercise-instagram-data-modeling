@@ -7,8 +7,8 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Usuario(Base):
-    __tablename__ = 'usuario'
+class User(Base):
+    __tablename__ = 'user'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
@@ -22,9 +22,8 @@ class Post(Base):
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    userId = Column(Integer, primary_key=True)
-    usuario_id = Column(Integer, ForeignKey('usuario.id'))
-    usuario = relationship(Usuario)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    post_relationship = relationship("User")
     
 
 class Media(Base):
@@ -32,35 +31,31 @@ class Media(Base):
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
+    type = Column(String(250))
     URL = Column(String(250), nullable=False)
-    postId = Column(String(250), nullable=False)
-    post_id = Column(Integer, ForeignKey('post.id'))
-    post = relationship(Post)
+    post_id = Column(Integer, ForeignKey("post.id"))
+    post_relationship = relationship("Post")
     
 
 class Follower(Base):
-    __tablename__ = 'followers'
+    __tablename__ = 'follower'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    user_from_id = Column(Integer, primary_key=True)
-    user_to_id = Column(String(250), nullable=False)
-    usuario_id = Column(Integer, ForeignKey('usuario.id'))
-    usuario = relationship(Usuario)
+    user_from_id = Column(Integer, ForeignKey("user.id"))
+    user_to_id = Column(Integer, ForeignKey("user.id"))
+    user_relationship_from = relationship("User", foreign_keys=[user_from_id])
+    user_relationship_to = relationship("User", foreign_keys=[user_to_id])
 
 class Coment(Base):
     __tablename__ = 'coment'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    coment_text = Column(String(250), nullable=False)
-    autor_id = Column(Integer, ForeignKey('follower.id'))
-    follower = relationship(Follower)
-    post_id = Column(Integer, ForeignKey('usuario.id'))
-    usuario = relationship(Usuario)
-
-
-
+    comment_text =  Column(String(250), nullable=False)
+    author_id = Column(Integer, ForeignKey("user.id"))
+    post_id = Column(Integer, ForeignKey("post.id"))
+    comment_relationship = relationship("Post")
 
 
 
